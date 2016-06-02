@@ -6,7 +6,8 @@
 <link rel="icon" type="image/png" href="icon.png">
 <!--Scripts-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>   
- <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>    <!--google Fonts-->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>    <!--google Fonts-->
  <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
@@ -28,22 +29,21 @@
 
 <div class="alert success">
   <span class="closebtn">x</span>  
-  <strong>Hello!</strong>&nbsp Filter is available!!&nbsp why not try it?
+ Hello!&nbsp Filter is available!!&nbsp why not try it?
 </div>
 
 		<div class="alert">
   <span class="closebtn">x</span>  
-  <strong>Notice!</strong>&nbsp Please open this is 
-  <strong>Firefox Browser.</strong> Chrome does not suppourt 
-  properly with loading json files locally rather than URL.Thank you!!	
+  Notice!&nbsp Please open this is in localhost by wamp server or some other server if it is in 
+  Chrome Browser and open normally in FireFox Devoloper Edition.Thank you!!	
 </div>
 <div class="alert warning">
   <span class="closebtn">x</span>  
-  <strong>Hey there!</strong> &nbsp Is this site responsive Check it out..?.
+  Hey there!&nbsp Is this site responsive Check it out..?.
 </div>
 <div class="alert info">
   <span class="closebtn">x</span>  
-  <strong>Hey there!</strong> &nbsp Hover over for more Information!<br>&#x26AB &nbsp Calender<br>&#x26AB &nbsp Image
+  Hey there!&nbsp Hover over for more Information!<br>&#x26AB &nbsp Calender<br>&#x26AB &nbsp Image
 </div>
 	</div>
 	
@@ -55,7 +55,15 @@ parentDiv.attr({"id":"parentDiv","class":"card"});
 function sort(type) {
 	  $("#parentDiv").empty();
     $.getJSON("raw_data.json", ({ Search }) => {   
-        Search.sort((a, b) => a[type] > b[type]);
+        Search.sort(function(a,b){
+		if(a[type]<b[type]){return -1;}
+		else if(a[type]>b[type]){
+		return 1;
+		}
+		else {
+		return 0;
+		}
+		});
         console.log(`Sorted by: ${type}`);
 		console.log("movies are displayed!!");
 		var i;
@@ -121,7 +129,7 @@ dataDiv.append(icons);    //appending
 
 <!--Description Here-->
 var description=$("<p></p>");
-description.attr({"class":"description"});
+description.attr({"class":"description","id":"descriptionId"});
 dataDiv.append(description);
 
 
@@ -130,14 +138,39 @@ parentDiv.append(childDiv);
 $('body').append(parentDiv);
 
 document.getElementsByTagName("h2")[i].innerHTML="<b><a class='address' style='text-decoration:none;color:#212121'>" + "WATCH"+ "&nbsp&nbsp&nbsp&nbsp"+"NOW"+ "&nbsp&nbsp&nbsp&nbsp"+"&#x1f3A5"+"</a></b><br>";
-document.getElementsByTagName("p")[i].innerHTML= "<b>" + title + "<br><span style='font-size:12px;float:center;'>"+ rating +"/10</span></b>";	
+document.getElementsByTagName("p")[i].innerHTML= "<b>" + fontCheck() + "<br><span style='font-size:14px;float:center;'>"+ "rating-"+rating +"/10</span></b>";	
 //document.getElementsByClassName("descriptionSpan")[i].innerHTML= "<b>" + rating + "</b><br>";	
 document.getElementsByClassName("rated")[i].innerHTML= "<b>" + rated + "</b><br>";	
 document.getElementsByClassName("rated")[i].setAttribute("title",rated + " Rated");	
 document.getElementsByClassName("year")[i].innerHTML= "&#x1F4C5"+ "&nbsp" +year;
 document.getElementsByClassName("year")[i].setAttribute("title","year released " + year);
-
 document.getElementsByClassName("address")[i].setAttribute("href","#");
+
+function fontCheck(){
+var titleText=title;
+var textCount=titleText.length;
+var textStyle=document.getElementsByClassName("description")[i];
+if ((textCount>= 1) && (textCount< 10)) {
+        textStyle.style.fontSize="40px";
+    }
+    else if((textCount>= 10) && (textCount< 20)) {
+        textStyle.style.fontSize="38px";
+    }
+   
+    else if((textCount>= 20) && (textCount< 30)) {
+        textStyle.style.fontSize="30px";
+    }
+   else if((textCount>= 30) && (textCount< 40)) {
+        textStyle.style.fontSize="26px";
+    }
+       else {
+        textStyle.style.fontSize="26px";
+    }    
+
+return title;
+
+
+}
 }
 var message=document.createElement("button");
 parentDiv.append(message);
@@ -146,7 +179,8 @@ message.setAttribute("href","#sortDiv");
 message.setAttribute("class","message");
 message.innerHTML="take me to top";	
 $("#message").click( function() {
-   $(window).scrollTop(0);
+  // $(window).scrollTop(20,{duration:2000});
+    $('html, body').animate({scrollTop:20},1500);
  });
 
 }
@@ -163,7 +197,7 @@ for (i = 0; i < close.length; i++) {
 		var opac=document.getElementById("parentDiv");
 		div.style.opacity = "0";
 		
-        setTimeout(function(){ div.style.display = "none";opac.style.opacity="1";},3000);
+        setTimeout(function(){ div.style.display = "none";opac.style.opacity="1";opac.style.filter="blur(0px)";},3000);
     }
 }
  /*---------popups end------------*/  
