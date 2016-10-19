@@ -12,8 +12,7 @@
  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
  <link href='style.css' rel='stylesheet' type='text/css'>
- <link href='select_style.css' rel='stylesheet' type='text/css'>
- <link href='search_button.css' rel='stylesheet' type='text/css'>
+ <link href='scrollbar.css' rel='stylesheet' type='text/css'>
  <link href='popups.css' rel='stylesheet' type='text/css'>
   
 </head>
@@ -23,6 +22,11 @@
 		<button id="sortButton" class="titleButton" title="Filter by Title" onclick=sort("Title")> Title</button>		
 		<button id="sortButton" class="yearButton" title="Filter by Year" onclick=sort("Year")> Year</button>		
 		<button id="sortButton" class="ageButton" title="Filter by Age" onclick=sort("Rated")> Age</button>		
+		<select id="sortButton" class="selectOrder" title="Order please">
+		<option value="0">Increasing</option>
+		<option value="1">Decreasing</option>
+		</select>
+		
 		<res class="res"><img src="trans.png" height="30px" width="60px"></res>
 	
 	</div>
@@ -51,17 +55,35 @@
 var parentDiv=$('<div></div>');
 parentDiv.attr({"id":"parentDiv","class":"card"});
 
-
 function sort(type) {
 	  $("#parentDiv").empty();
     $.getJSON("raw_data.json", ({ Search }) => {   
+	    var x=$(".selectOrder").val();
+		//console.log(x);
         Search.sort(function(a,b){
-		if(a[type]<b[type]){return -1;}
-		else if(a[type]>b[type]){
-		return 1;
-		}
+		if(x==0){
+			if(a[type]<b[type])
+					{
+					return -1;
+				}
+				else if(a[type]>b[type]){
+					return 1;
+				}
+				else {
+					return 0;
+					}
+				}
+			else{
+				if(a[type]<b[type])
+					{
+					return 1;
+					}
+				else if(a[type]>b[type]){
+				return -1;
+				}
 		else {
 		return 0;
+		}
 		}
 		});
         console.log(`Sorted by: ${type}`);
@@ -198,9 +220,9 @@ for (i = 0; i < close.length; i++) {
 		div.style.opacity = "0";
 		
         setTimeout(function(){ div.style.display = "none";opac.style.opacity="1";opac.style.filter="blur(0px)";},3000);
-    }
+    };
 }
- /*---------popups end------------*/  
+/*---------popups end------------*/  
 //sort('Year');
 //sort('Title');
 
